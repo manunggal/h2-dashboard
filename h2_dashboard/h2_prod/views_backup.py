@@ -18,9 +18,9 @@ def hydrogen_production_view(request):
             default_output = calculate_defaults()
             context = {
                 'form': form,
-                'total_electricity_requirement': default_output[0],
-                'total_co2_emissions': default_output[1],
-                'co2_emissions_reduction': default_output[2],
+                'default_total_electricity_requirement': 1,
+                'default_total_co2_emissions': 2,
+                'co2_emission_reduction': default_output[2],
             }
             return render(request, 'h2_prod/hydrogen_production.html', context)
 
@@ -50,7 +50,7 @@ def hydrogen_production_view(request):
 
                 # calculations for the new state of H2 production, 
                 # how much CO2 emission is reduced, and how much electricity is required 
-                total_electricity_requirement, total_co2_emissions, co2_emissions_reduction = calculate_outputs(
+                total_electricity_requirement, total_co2_emission, co2_emission_reduction = calculate_outputs(
                 total_h2_production, electrolyzer_efficiency, renewable_percentage, 
                 co2_emission_per_kwh_fossil, co2_emission_per_kwh_renewable, current_state_co2_emission)
 
@@ -59,8 +59,8 @@ def hydrogen_production_view(request):
                 context = {
                     'form': form,
                     'total_electricity_requirement': total_electricity_requirement,
-                    'total_co2_emissions': total_co2_emissions,
-                    'co2_emissions_reduction': co2_emissions_reduction,
+                    'total_co2_emission': total_co2_emission,
+                    'co2_emission_reduction': co2_emission_reduction,
                     # Add other context variables as needed
                 }
                 

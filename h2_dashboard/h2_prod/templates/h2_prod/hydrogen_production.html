@@ -9,7 +9,17 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Calculate</button>
+
+        <!-- Reset button -->
+        <button type="submit" name="reset" class="btn btn-secondary">Reset</button>
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-primary">Calculate</button>
+
     </form>
+    <div>
+        <p>Total Electricity Requirement: {{ total_electricity_requirement }} </p>
+        <p>Total CO2 Emission:{{ total_co2_emissions }}</p>
+        <p>CO2 Emissions Reduction: {{ co2_emissions_reduction }}</p>
+    </div>
 </body>
 </html>
