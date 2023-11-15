@@ -100,7 +100,7 @@ def get_benchmark_data():
             key = f"{model_name}-{benchmark.year}"
             if key not in benchmark_data:
                 benchmark_data[key] = []
-            benchmark_data[key].append(benchmark.value)
+            benchmark_data[key].append((benchmark.value, benchmark.name))
     return benchmark_data
 
 

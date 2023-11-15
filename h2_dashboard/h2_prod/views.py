@@ -63,7 +63,17 @@ def hydrogen_production_view(request):
                 benchmark_data = get_benchmark_data()
 
                 # step 2: separate the benchmark data into two lists
-                electricity_benchmark_data = [(int(key.split('-')[1]), value) for key, value in benchmark_data.items() if 'ElectricityProductionBenchmark' in key]
+                # electricity_benchmark_data = [
+                #     (int(key.split('-')[1]), benchmark_value, benchmark_name) for key,
+                #       values in benchmark_data.items() if 'ElectricityProductionBenchmark' in key for benchmark_value, benchmark_name in values]
+
+                electricity_benchmark_data = [
+                    (int(key.split('-')[1]), benchmark_value, benchmark_name)
+                    for key, values in benchmark_data.items() if 'ElectricityProductionBenchmark' in key
+                    for benchmark_value, benchmark_name in values]
+
+
+
                 # co2_benchmark_data = [(year, value[0] for key, value in benchmark_data.items() if 'CO2EmissionsBenchmark' in key)]
 
                 # step 3: Prepare data for the chart
@@ -71,8 +81,8 @@ def hydrogen_production_view(request):
                 electricity_chart_data = [
                     # Add the benchmark data to the chart
                     go.Bar(
-                        x = [f'Benchmark {year}' for year, value in electricity_benchmark_data],
-                        y = [value[0] for year, value in electricity_benchmark_data],
+                        x = [f'{name}' for year, value, name in electricity_benchmark_data],
+                        y = [value for year, value, name in electricity_benchmark_data],
                         name = 'Benchmark',
                         marker = dict(color='blue')
                     ),
