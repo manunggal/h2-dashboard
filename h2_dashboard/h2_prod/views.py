@@ -61,16 +61,15 @@ def hydrogen_production_view(request):
                 rounded_total_electricity_requirement = round(total_electricity_requirement)
                 rounded_total_co2_emissions = round(total_co2_emissions)
 
+
                 # Create the bar chart
 
                 # step 1: fetch benchmark data
                 benchmark_data = get_benchmark_data()
 
                 # step 2: separate the benchmark data into two lists
-                # electricity_benchmark_data = [
-                #     (int(key.split('-')[1]), benchmark_value, benchmark_name) for key,
-                #       values in benchmark_data.items() if 'ElectricityProductionBenchmark' in key for benchmark_value, benchmark_name in values]
-
+                
+                # electricity_benchmark_data
                 electricity_benchmark_data = sorted(
                     [(int(key.split('-')[1]), benchmark_value, benchmark_name)
                     for key, values in benchmark_data.items() if 'ElectricityProductionBenchmark' in key
@@ -78,12 +77,17 @@ def hydrogen_production_view(request):
                     key=lambda x: x[0]
                 )
 
-                
+                # co2_benchmark_data
+                co2_benchmark_data = sorted(
+                    [(int(key.split('-')[1]), benchmark_value, benchmark_name)
+                    for key, values in benchmark_data.items() if 'CO2EmissionsBenchmark' in key
+                    for benchmark_value, benchmark_name in values],
+                    key=lambda x: x[0]
+                )
 
+                # benchmark_colors
                 benchmark_colors = ['#d53e4f', '#f46d43', '#fdae61']
                 reversed_colors = benchmark_colors[::-1]
-
-                # co2_benchmark_data = [(year, value[0] for key, value in benchmark_data.items() if 'CO2EmissionsBenchmark' in key)]
 
                 # step 3: Prepare data for the chart
                 # Electricity data
@@ -108,6 +112,37 @@ def hydrogen_production_view(request):
                     )
                 ]
 
+                # CO2 data
+                co2_chart_data = [
+                    # Add the benchmark data to the chart
+                    *[
+                    go.Bar(
+                        x = [f'{name}'],
+                        y = [value],
+                        name = f'Benchmark {year}',
+                        marker = dict(color=reversed_colors[i])
+                    )
+                    for i, (year, value, name) in enumerate(co2_benchmark_data[:3])
+                    ],
+
+                    # Add the current state of CO2 emissions to produce hydrogen
+                    go.Bar(
+                        x = ['Current State of CO2 Emissions to produce H2'],
+                        y = [round(current_total_co2_emissions(120))],
+                        name = 'Your Calculation',
+                        marker = dict(color='#9e0142')
+                    ),
+
+                    # Add the calculated value to the chart
+                    go.Bar(
+                        x = ['Your Calculation'],
+                        y = [rounded_total_co2_emissions],
+                        name = 'Your Calculation',
+                        marker = dict(color='#3288bd')
+                    )
+                ]
+
+
                 # step 4: Generate the Plotly chart
                 # Electricity chart
                 electricity_layout = go.Layout(
@@ -116,12 +151,24 @@ def hydrogen_production_view(request):
                     yaxis = dict(title='Total Electricity Requirement (TWh)'),
                     showlegend=False
                 )
-                
+
                 electricity_fig = go.Figure(data=electricity_chart_data, layout=electricity_layout)
+
+                # CO2 chart
+                co2_layout = go.Layout(
+                    title = {'text':'CO2 Emissions vs Benchmarks Comparison', 'x':0.5, 'xanchor':'center'},
+                    xaxis = dict(title='Benchmark - Year'),
+                    yaxis = dict(title='Total CO2 Emissions (MtCO2)'),
+                    showlegend=False
+                )
+                
+                co2_fig = go.Figure(data=co2_chart_data, layout=co2_layout)
+                
 
                 # step 5: Convert the Plotly chart to HTML
                 electricity_chart_html = plot(electricity_fig, output_type='div', include_plotlyjs=False)
-                #               
+                co2_chart_html = plot(co2_fig, output_type='div', include_plotlyjs=False)
+           
                 # Pass results to the template
                 # Construct the context with form and results
                 context = {
@@ -130,10 +177,11 @@ def hydrogen_production_view(request):
                     'total_co2_emissions': total_co2_emissions,
                     'co2_emissions_reduction': co2_emissions_reduction,
                     'electricity_chart_html': electricity_chart_html,
+                    'co2_chart_html': co2_chart_html,
                     # Add other context variables as needed
                 }
-                print(total_electricity_requirement)
-                print(electricity_benchmark_data)
+                print(rounded_total_co2_emissions)
+                print(co2_benchmark_data)
                 print("test print")
 
                 # Render the template with context
