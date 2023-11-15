@@ -1,3 +1,6 @@
+
+from django.apps import apps
+
 # dummy input data
 # total_h2_production = 90
 # electrolyzer_efficiency = 70
@@ -79,4 +82,25 @@ def calculate_defaults():
 # print(f'Total CO2 emission: {total_co2_emission:.2f} Mega tonnes per year')
 # print(f'CO2 emission reduction: {co2_emission_reduction:.2f} Mega tonnes per year')
 # print(f'Previous CO2 emission: {current_state_co2_emission:.2f} Mega tonnes per year')
+
+
+
+def get_benchmark_data():
+    # List of benchmark models you have, e.g., ['ElectricityProductionBenchmark', 'CO2EmissionsBenchmark']
+    benchmark_models = ['ElectricityProductionBenchmark', 'CO2EmissionsBenchmark']
+    benchmark_data = {}
+
+    # Loop through each benchmark model and get all the data
+    for model_name in benchmark_models:
+        model = apps.get_model('h2_prod', model_name)  # Adjust 'h2_prod' to your app name if different
+        benchmarks = model.objects.all()
+
+        # Loop through each benchmark object and store the data in a dictionary
+        for benchmark in benchmarks:
+            key = f"{model_name}-{benchmark.year}"
+            if key not in benchmark_data:
+                benchmark_data[key] = []
+            benchmark_data[key].append(benchmark.value)
+    return benchmark_data
+
 

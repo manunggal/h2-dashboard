@@ -3,10 +3,10 @@ from .models import ElectricityProductionBenchmark, CO2EmissionsBenchmark
 
 @admin.register(ElectricityProductionBenchmark)
 class ElectricityProductionBenchmarkAdmin(admin.ModelAdmin):
-    list_display = ('year', 'total_production')
+    list_display = ('year', 'value')
     search_fields = ('year',)
 
 @admin.register(CO2EmissionsBenchmark)
 class CO2EmissionsBenchmarkAdmin(admin.ModelAdmin):
-    list_display = ('year', 'total_emissions')
+    list_display = ('year', 'value')
     search_fields = ('year',)

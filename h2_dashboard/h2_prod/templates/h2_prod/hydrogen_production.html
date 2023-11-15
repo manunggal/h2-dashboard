@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hydrogen Production Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
     <form method="post">
@@ -17,9 +18,12 @@
 
     </form>
     <div>
-        <p>Total Electricity Requirement: {{ total_electricity_requirement }} </p>
-        <p>Total CO2 Emission:{{ total_co2_emissions }}</p>
-        <p>CO2 Emissions Reduction: {{ co2_emissions_reduction }}</p>
+        <p>Total Electricity Requirement: {{ total_electricity_requirement|floatformat:2 }} TWh</p>
+        <p>Total CO2 Emission:{{ total_co2_emissions|floatformat:2 }} Mega tonnes per year</p>
+        <p>CO2 Emissions Reduction: {{ co2_emissions_reduction|floatformat:2 }} Mega tonnes per year</p>
+    </div>
+    <div>
+        {{ electricity_chart_html | safe }}
     </div>
 </body>
 </html>
