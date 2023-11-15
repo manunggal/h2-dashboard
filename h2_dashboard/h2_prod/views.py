@@ -57,6 +57,10 @@ def hydrogen_production_view(request):
                 total_h2_production, electrolyzer_efficiency, renewable_percentage, 
                 co2_emission_per_kwh_fossil, co2_emission_per_kwh_renewable, current_state_co2_emission)
 
+                # round the total_electricity_requirement and total_co2_emissions
+                rounded_total_electricity_requirement = round(total_electricity_requirement)
+                rounded_total_co2_emissions = round(total_co2_emissions)
+
                 # Create the bar chart
 
                 # step 1: fetch benchmark data
@@ -67,12 +71,17 @@ def hydrogen_production_view(request):
                 #     (int(key.split('-')[1]), benchmark_value, benchmark_name) for key,
                 #       values in benchmark_data.items() if 'ElectricityProductionBenchmark' in key for benchmark_value, benchmark_name in values]
 
-                electricity_benchmark_data = [
-                    (int(key.split('-')[1]), benchmark_value, benchmark_name)
+                electricity_benchmark_data = sorted(
+                    [(int(key.split('-')[1]), benchmark_value, benchmark_name)
                     for key, values in benchmark_data.items() if 'ElectricityProductionBenchmark' in key
-                    for benchmark_value, benchmark_name in values]
+                    for benchmark_value, benchmark_name in values],
+                    key=lambda x: x[0]
+                )
 
+                
 
+                benchmark_colors = ['#d53e4f', '#f46d43', '#fdae61']
+                reversed_colors = benchmark_colors[::-1]
 
                 # co2_benchmark_data = [(year, value[0] for key, value in benchmark_data.items() if 'CO2EmissionsBenchmark' in key)]
 
@@ -80,27 +89,32 @@ def hydrogen_production_view(request):
                 # Electricity data
                 electricity_chart_data = [
                     # Add the benchmark data to the chart
+                    *[
                     go.Bar(
-                        x = [f'{name}' for year, value, name in electricity_benchmark_data],
-                        y = [value for year, value, name in electricity_benchmark_data],
-                        name = 'Benchmark',
-                        marker = dict(color='blue')
-                    ),
+                        x = [f'{name}'],
+                        y = [value],
+                        name = f'Benchmark {year}',
+                        marker = dict(color=reversed_colors[i])
+                    )
+                    for i, (year, value, name) in enumerate(electricity_benchmark_data[:3])
+                    ],
+
                     # Add the calculated value to the chart
                     go.Bar(
                         x = ['Your Calculation'],
-                        y = [total_electricity_requirement],
+                        y = [rounded_total_electricity_requirement],
                         name = 'Your Calculation',
-                        marker = dict(color='red')
+                        marker = dict(color='#3288bd')
                     )
                 ]
 
                 # step 4: Generate the Plotly chart
                 # Electricity chart
                 electricity_layout = go.Layout(
-                    title = 'Electricity Production Benchmark Comparison',
-                    xaxis = dict(title='Year'),
-                    yaxis = dict(title='Total Electricity Requirement (TWh)')
+                    title = {'text':'Electricity Production vs Benchmarks Comparison', 'x':0.5, 'xanchor':'center'},
+                    xaxis = dict(title='Benchmark - Year'),
+                    yaxis = dict(title='Total Electricity Requirement (TWh)'),
+                    showlegend=False
                 )
                 
                 electricity_fig = go.Figure(data=electricity_chart_data, layout=electricity_layout)
@@ -112,7 +126,7 @@ def hydrogen_production_view(request):
                 # Construct the context with form and results
                 context = {
                     'form': form,
-                    'total_electricity_requirement': total_electricity_requirement,
+                    'total_electricity_requirement': rounded_total_electricity_requirement,
                     'total_co2_emissions': total_co2_emissions,
                     'co2_emissions_reduction': co2_emissions_reduction,
                     'electricity_chart_html': electricity_chart_html,
