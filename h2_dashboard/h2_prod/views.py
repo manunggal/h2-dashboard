@@ -178,7 +178,6 @@ def hydrogen_production_view(request):
                     'co2_emissions_reduction': co2_emissions_reduction,
                     'electricity_chart_html': electricity_chart_html,
                     'co2_chart_html': co2_chart_html,
-                    # Add other context variables as needed
                 }
                 print(rounded_total_co2_emissions)
                 print(co2_benchmark_data)

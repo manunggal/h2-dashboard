@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Hydrogen | Dashboard</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{% static 'assetsassets/plugins/fontawesome-free/css/all.min.css' %}">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/7.1.0/css/ionicons.min.css">
+  <!-- Tempusdominus Bbootstrap 4 -->
+  <link rel="stylesheet" href="{% static 'assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="{% static 'assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="{% static 'assets/plugins/jqvmap/jqvmap.min.css' %}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static 'assets/dist/css/adminlte.min.css' %}">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="{% static 'assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="{% static 'assets/plugins/daterangepicker/daterangepicker.css' %}">
+  <!-- summernote -->
+  <link rel="stylesheet" href="{% static 'assets/plugins/summernote/summernote-bs4.css' %}">
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <!-- Ion range slider -->
+  <link rel="stylesheet" href="{% static 'assets/plugins/ion-rangeslider/css/ion.rangeSlider.min.css' %}">
+
+  <!-- CSS Classes for the content -->
+  <style>.slider-title {font-size: small; font-weight: normal;}</style>
+  <!-- Plotly JavaScript Library -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="index3.html" class="nav-link">Home</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="#" class="nav-link">Contact</a>
+      </li>
+    </ul>
+
+    <!-- SEARCH FORM -->
+    <form class="form-inline ml-3">
+      <div class="input-group input-group-sm">
+        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+        <div class="input-group-append">
+          <button class="btn btn-navbar" type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#">
+          <i class="fas fa-th-large"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="index3.html" class="brand-link">
+      <img src="{% static 'assets/dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+           style="opacity: .8">
+      <span class="brand-text font-weight-light">H2 Production</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          <img src="{% static 'assets/dist/img/user2-160x160.jpg' %}" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+          <a href="#" class="d-block">Alexander Pierce</a>
+        </div>
+      </div>
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item has-treeview menu-open">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Test Dashboard
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="./index.html" class="nav-link active">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Dashboard v1</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="./index2.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Dashboard v2</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="./index3.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Dashboard v3</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="pages/widgets.html" class="nav-link">
+              <i class="fa-solid fa-book"></i>
+              <p>
+                References
+                
+              </p>
+            </a>
+          </li>
+
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark">Production Dashboard</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Dashboard v1</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner">
+                <h3>150 TWh</h3>
+                <p>Total Electricity Requirements</p>
+              </div>
+              <div class="icon">
+                <!-- <img src="icons/battery-charging.svg" alt="Battery Charging Icon" /> -->
+                <!-- <ion-icon name="battery-charging-outline"></ion-icon> -->
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+              <div class="inner">
+                <h3>53<sup style="font-size: 20px">%</sup></h3>
+                <p>Total Hydrogen Production</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+              <div class="inner">
+                <h3>44</h3>
+
+                <p>Required Electrolyzers</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-person-add"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-danger">
+              <div class="inner">
+                <h3>65</h3>
+                <p>Total CO2e Emissions</p>
+              </div>
+              <div class="icon">
+                <i class="fa-solid fa-industry"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+        </div>
+        <!-- /.row -->
+
+        <!-- Main row -->
+        <div class="row">
+          <!-- Electricity Plot -->
+          <section class="col-lg-6 connectedSortable ui-sortable">
+            <div class="card">
+              <!-- card header -->
+              <div class="card-header ui-sortable-handle" style="cursor: move;">
+                <h3 class="card-title">
+                <i class="fas fa-chart-pie mr-1"></i>
+                Electricity Requirements
+                </h3>
+                <div class="card-tools"></div>
+              </div>
+              <!-- card body -->
+              <div class="card-body">
+                <div id="electricity-requirements-plot"></div>
+              </div>
+          </section>
+          <!-- CO2 emissions plot -->
+          <section class="col-lg-6">
+            <div class="card">
+              <!-- card header -->
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-chart-pie mr-1"></i>
+                  CO2e Emissions 
+                </h3>
+              </div>
+              <!-- card body -->
+              <div class="card-body">
+                <div id="co2-emissions-plot"></div>
+            </div>
+          </section>
+        </div>
+
+
+        <!-- Electricity & CO2e Emissions Plot -->
+        <div class="container-fluid">
+          <div class="row">
+            <!-- Required Electricity -->
+            <div class="col-lg-6">
+              <div id="electricity-requirements-plot"></div>
+            </div>
+            <!-- CO2e emissions -->
+            <div class="col-lg-6">
+              <div id="co2-emissions-plot"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Start of the new row for sliders and other inputs -->
+        <div class="row">
+          <!-- Column for the CO2e Emissions Sliders -->
+          <div class="col-md-6">
+              <div class="card">
+                  <div class="card-header">
+                      CO2e Emissions of H2 Production Based on Source
+                  </div>
+                  <div class="card-body">
+                      <!-- Sliders here -->
+                      <!-- coal -->
+                      <label for="sliderCoal" class="slider-title">Derived from Coal</label>
+                      <input type="text" id="sliderCoal" name="sliderCoal" value="" />
+                      <!-- Oil -->
+                      <label for="sliderOil" class="slider-title">Derived from Oil</label>
+                      <input type="text" id="sliderOil" name="sliderOil" value="" />
+                      <!-- Natural Gas -->
+                      <label for="sliderNatGas" class="slider-title">Derived from Natural Gas</label>
+                      <input type="text" id="sliderNatGas" name="sliderNatGas" value="" />
+                      <!-- Produced from Electrolysis -->
+                      <label for="sliderElectrolysis" class="slider-title">Produced from Electrolysis</label>
+                      <input type="text" id="sliderElectrolysis" name="sliderElectrolysis" value="" />
+                  </div>
+              </div>
+          </div>
+
+          <!-- Column for other inputs -->
+          <div class="col-md-6">
+              <div class="card">
+                  <div class="card-header">
+                      Other Inputs
+                  </div>
+                  <div class="card-body">
+                      <!-- Total H2 Production rate -->
+                      <label for="SliderH2Production" class="slider-title">Total Hydrogen Production</label>
+                      <input type="text" id="SliderH2Production" name="SliderH2Production" value=""/>
+                      <!-- electrolyzer_efficiency  -->
+                      <label for="SliderElectrolyzerEff" class="slider-title">Electrolyzer Efficiency</label>
+                      <input type="text" id="SliderElectrolyzerEff" name="SliderElectrolyzerEff" value=""/>
+                      <!-- renewable_percentage  -->
+                      <label for="SliderRenewablePct" class="slider-title">Renewable Percentage</label>
+                      <input type="text" id="SliderRenewablePct" name="SliderRenewablePct" value=""/>
+                      <!-- co2_emission_per_kwh_fossil  -->
+                      <label for="SliderCO2Emiss" class="slider-title">CO2 Emission per kWh Fossil</label>
+                      <input type="text" id="SliderCO2Emiss" name="SliderCO2Emiss" value=""/>
+                  </div>
+              </div>
+          </div>
+        </div>
+        <!-- End of the new row -->
+     
+
+        <!-- /.row (main row) -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <footer class="main-footer">
+    <strong>Copyright &copy; <a href="">talkwithnumbers.com</a>.</strong>
+    All rights reserved.
+    <div class="float-right d-none d-sm-inline-block">
+      <b>Version</b> 1.0
+    </div>
+  </footer>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<script src="{% static 'assets/plugins/jquery/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="{% static 'assets/plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button)
+</script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'assets/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- ChartJS -->
+<script src="{% static 'assets/plugins/chart.js/Chart.min.js' %}"></script>
+<!-- Sparkline -->
+<script src="{% static 'assets/plugins/sparklines/sparkline.js' %}"></script>
+<!-- JQVMap -->
+<script src="{% static 'assets/plugins/jqvmap/jquery.vmap.min.js' %}"></script>
+<script src="{% static 'assets/plugins/jqvmap/maps/jquery.vmap.usa.js' %}"></script>
+<!-- jQuery Knob Chart -->
+<script src="{% static 'assets/plugins/jquery-knob/jquery.knob.min.js' %}"></script>
+<!-- daterangepicker -->
+<script src="{% static 'assets/plugins/moment/moment.min.js' %}"></script>
+<script src="{% static 'assets/plugins/daterangepicker/daterangepicker.js' %}"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="{% static 'assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+<!-- Summernote -->
+<script src="{% static 'assets/plugins/summernote/summernote-bs4.min.js' %}"></script>
+<!-- overlayScrollbars -->
+<script src="{% static 'assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'assets/dist/js/adminlte.js' %}"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="{% static 'assets/dist/js/pages/dashboard.js' %}"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="{% static 'assets/dist/js/demo.js' %}"></script>
+<!-- Javascript Tag -->
+<script src="{% static 'assets/plugins/ion-rangeslider/js/ion.rangeSlider.min.js' %}"></script>
+
+  <!-- ionicons script -->
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+<!--Functions for the input sliders -->
+<script>
+  $(document).ready(function() {
+      $("#sliderCoal").ionRangeSlider({
+          min: 0,
+          max: 100,
+          from: 50,  // default value
+          type: 'single',
+          step: 1,
+          postfix: ' units',
+          prettify: false,
+          hasGrid: true
+      });
+      $("#sliderOil").ionRangeSlider({
+          min: 0,
+          max: 100,
+          from: 50,  // default value
+          type: 'single',
+          step: 1,
+          postfix: ' units',
+          prettify: false,
+          hasGrid: true
+      });
+      $("#sliderNatGas").ionRangeSlider({
+          min: 0,
+          max: 100,
+          from: 50,  // default value
+          type: 'single',
+          step: 1,
+          postfix: ' units',
+          prettify: false,
+          hasGrid: true
+      });
+      $("#sliderElectrolysis").ionRangeSlider({
+          min: 0,
+          max: 100,
+          from: 50,  // default value
+          type: 'single',
+          step: 1,
+          postfix: ' units',
+          prettify: false,
+          hasGrid: true
+      });
+      $("#SliderH2Production").ionRangeSlider({
+          min: 0,
+          max: 100,
+          from: 50,  // default value
+          type: 'single',
+          step: 1,
+          postfix: ' units',
+          prettify: false,
+          hasGrid: true
+      });
+      $("#SliderElectrolyzerEff").ionRangeSlider({
+          min: 0,
+          max: 100,
+          from: 50,  // default value
+          type: 'single',
+          step: 1,
+          postfix: ' units',
+          prettify: false,
+          hasGrid: true
+      });
+      $("#SliderRenewablePct").ionRangeSlider({
+          min: 0,
+          max: 100,
+          from: 50,  // default value
+          type: 'single',
+          step: 1,
+          postfix: ' units',
+          prettify: false,
+          hasGrid: true
+      });
+      $("#SliderCO2Emiss").ionRangeSlider({
+          min: 0,
+          max: 100,
+          from: 50,  // default value
+          type: 'single',
+          step: 1,
+          postfix: ' units',
+          prettify: false,
+          hasGrid: true
+      });
+      
+  });
+  </script>
+
+  <!-- Plotting script using Plotly -->
+  <script>
+    // Plot for Electricity Requirements
+    var trace1 = {
+      x: ['Actual', 'Benchmark'],
+      y: [150, 120],  // Replace with your data
+      type: 'bar'
+    };
+  
+    var data1 = [trace1];
+    var layout1 = { title: 'Electricity Requirements' };
+  
+    Plotly.newPlot('electricity-requirements-plot', data1, layout1);
+  
+    // Plot for CO2 Emissions
+    var trace2 = {
+      x: ['Actual', 'Benchmark'],
+      y: [80, 60],  // Replace with your data
+      type: 'bar'
+    };
+  
+    var data2 = [trace2];
+    var layout2 = { title: 'Total CO2 Emissions' };
+  
+    Plotly.newPlot('co2-emissions-plot', data2, layout2);
+  </script>
+  
+  
+
+</body>
+</html>
