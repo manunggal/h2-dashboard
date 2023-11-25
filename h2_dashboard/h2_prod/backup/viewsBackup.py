@@ -25,6 +25,7 @@ def hydrogen_production_view(request):
                 'total_co2_emissions': default_output[1],
                 'co2_emissions_reduction': default_output[2],
             }
+            
             return render(request, 'h2_prod/hydrogen_production.html', context)
 
         else:
@@ -34,10 +35,10 @@ def hydrogen_production_view(request):
             if form.is_valid():
                 # Get the data from the form, and then process the data in form.cleaned_data
                 # h2 emissions per source
-                h2_from_natural_gas = form.cleaned_data['h2_from_natural_gas']
-                h2_from_coal = form.cleaned_data['h2_from_coal']
-                h2_from_oil = form.cleaned_data['h2_from_oil']
-                h2_from_electrolysis = form.cleaned_data['h2_from_electrolysis']
+                sliderNatGas = form.cleaned_data['sliderNatGas']
+                sliderCoal = form.cleaned_data['sliderCoal']
+                sliderOil = form.cleaned_data['sliderOil']
+                sliderElectrolysis = form.cleaned_data['sliderElectrolysis']
 
                 # CO2 emissions of electricity generation per source
                 co2_emission_per_kwh_fossil = form.cleaned_data['co2_emission_per_kwh_fossil']
@@ -179,17 +180,21 @@ def hydrogen_production_view(request):
                     'electricity_chart_html': electricity_chart_html,
                     'co2_chart_html': co2_chart_html,
                 }
-                print(rounded_total_co2_emissions)
-                print(co2_benchmark_data)
+                # print(rounded_total_co2_emissions)
+                # print(co2_benchmark_data)
+                print('form is valid')
                 print(request.POST)
-                print(request.POST.get('h2_from_coal'))
+                
                 # Render the template with context
                 return render(request, 'h2_prod/hydrogen_production.html', context)
 
             # If the form is not valid, then render the form with errors
             else:
+                print(form.errors)
+                print('form is invalid')
                 context = {'form': form}
                 print(request.POST)
+                
     
     # Render the template with context
     return render(request, 'h2_prod/hydrogen_production.html', context)

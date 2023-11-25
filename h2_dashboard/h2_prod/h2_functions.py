@@ -37,8 +37,8 @@ def current_total_co2_emissions(total_h2_production):
     co2_emissions_electro = total_h2_prod_kg * percentage_electro * co2_per_kg_electro
 
     # Summing up the CO2 emissions from all sources to get the total CO2 emissions from hydrogen production
-    previous_co2_emission = co2_emissions_gas + co2_emissions_oil + co2_emissions_coal + co2_emissions_electro
-    return previous_co2_emission * 1e-9  # Conversion to Mega tonnes
+    current_state_co2_emission = co2_emissions_gas + co2_emissions_oil + co2_emissions_coal + co2_emissions_electro
+    return current_state_co2_emission * 1e-9  # Conversion to Mega tonnes
 
 # current_state_co2_emission = current_total_co2_emissions(total_h2_production)
 

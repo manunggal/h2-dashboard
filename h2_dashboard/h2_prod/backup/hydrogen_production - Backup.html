@@ -301,51 +301,58 @@
           </div>
 
           <div class="row">
+            <!-- injecting the content of slider_inputs.html -->
+            <!-- <div class="slider-container">
+              {% include "h2_prod/slider_inputs.html" %}
+            </div> -->
             <!-- Column for the CO2e Emissions Sliders -->
             <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        CO2e Emissions of H2 Production Based on Source
-                    </div>
-                    <div class="card-body">
-                        <!-- coal -->
-                        <label for="sliderCoal" class="slider-title">Derived from Coal</label>
-                        <input type="text" id="sliderCoal" name="h2_from_coal">
-                        <!-- Oil -->
-                        <label for="sliderOil" class="slider-title">Derived from Oil</label>
-                        <input type="text" id="sliderOil" name="h2_from_oil">
-                        <!-- Natural Gas -->
-                        <label for="sliderNatGas" class="slider-title">Derived from Natural Gas</label>
-                        <input type="text" id="sliderNatGas" name="h2_from_natural_gas">
-                        <!-- Produced from Electrolysis -->
-                        <label for="sliderElectrolysis" class="slider-title">Produced from Electrolysis</label>
-                        <input type="text" id="sliderElectrolysis" name="h2_from_electrolysis">
-                    </div>
-                </div>
+              <div>
+                {% include "h2_prod/slider_inputs.html" %}
+              </div>
+              <div class="card">
+                  <div class="card-header">
+                      CO2e Emissions of H2 Production Based on Source
+                  </div>
+                  <div class="card-body">
+                      <!-- coal -->
+                      <label for="sliderCoal" class="slider-title">Derived from Coal</label>
+                      <input type="text" id="sliderCoal" name="sliderCoal">
+                      <!-- Oil -->
+                      <label for="sliderOil" class="slider-title">Derived from Oil</label>
+                      <input type="text" id="sliderOil" name="sliderOil">
+                      <!-- Natural Gas -->
+                      <label for="sliderNatGas" class="slider-title">Derived from Natural Gas</label>
+                      <input type="text" id="sliderNatGas" name="sliderNatGas">
+                      <!-- Produced from Electrolysis -->
+                      <label for="sliderElectrolysis" class="slider-title">Produced from Electrolysis</label>
+                      <input type="text" id="sliderElectrolysis" name="sliderElectrolysis">
+                  </div>
+              </div>
             </div>
             
             <!-- ... other columns or content ... -->
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        Other Inputs
-                    </div>
-                    <div class="card-body">
+            <!-- <div class="col-md-6"> -->
+                <!-- <div class="card"> -->
+                    <!-- <div class="card-header"> -->
+                        <!-- Other Inputs -->
+                    <!-- </div> -->
+                    <!-- <div class="card-body"> -->
                         <!-- Total H2 Production rate -->
-                        <label for="SliderH2Production" class="slider-title">Total Hydrogen Production</label>
-                        <input type="text" id="SliderH2Production" name="SliderH2Production" value=""/>
+                        <!-- <label for="SliderH2Production" class="slider-title">Total Hydrogen Production</label> -->
+                        <!-- <input type="text" id="SliderH2Production" name="SliderH2Production" value=""/> -->
                         <!-- electrolyzer_efficiency  -->
-                        <label for="SliderElectrolyzerEff" class="slider-title">Electrolyzer Efficiency</label>
-                        <input type="text" id="SliderElectrolyzerEff" name="SliderElectrolyzerEff" value=""/>
+                        <!-- <label for="SliderElectrolyzerEff" class="slider-title">Electrolyzer Efficiency</label> -->
+                        <!-- <input type="text" id="SliderElectrolyzerEff" name="SliderElectrolyzerEff" value=""/> -->
                         <!-- renewable_percentage  -->
-                        <label for="SliderRenewablePct" class="slider-title">Renewable Percentage</label>
-                        <input type="text" id="SliderRenewablePct" name="SliderRenewablePct" value=""/>
+                        <!-- <label for="SliderRenewablePct" class="slider-title">Renewable Percentage</label> -->
+                        <!-- <input type="text" id="SliderRenewablePct" name="SliderRenewablePct" value=""/> -->
                         <!-- co2_emission_per_kwh_fossil  -->
-                        <label for="SliderCO2Emiss" class="slider-title">CO2e Emission per kWh Fossil</label>
-                        <input type="text" id="SliderCO2Emiss" name="SliderCO2Emiss" value=""/>
-                    </div>
-                </div>
-            </div>
+                        <!-- <label for="SliderCO2Emission" class="slider-title">CO2e Emission per kWh Fossil</label> -->
+                        <!-- <input type="text" id="SliderCO2Emission" name="SliderCO2Emission" value=""/> -->
+                    <!-- </div> -->
+                <!-- </div> -->
+            <!-- </div> -->
 
 
 

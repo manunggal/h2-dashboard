@@ -1,0 +1,25 @@
+<form method="post" id="inputForm">
+    {% csrf_token %}
+
+    <!-- Hidden Django form -->
+    <div style="display: none;">
+        {{ form.as_p }}
+    </div>
+
+    <!-- Row for the included sliders -->
+    <div class="row">
+        <div class="col-md-12">
+            {% include "h2_prod/slider_inputs.html" %}
+        </div>
+    </div>
+
+    <!-- Row for other slider groups -->
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Slider group 1 here -->
+        </div>
+        <div class="col-md-6">
+            <!-- Slider group 2 here -->
+        </div>
+    </div>
+</form>
