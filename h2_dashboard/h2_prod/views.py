@@ -1,7 +1,7 @@
 from django.shortcuts import render
 # from django.contrib import messages
 from .forms import HydrogenProductionForm
-from .h2_functions import calculate_outputs, current_total_co2_emissions, calculate_defaults, get_benchmark_data
+from .h2_functions import calculate_outputs, current_total_co2_emissions, calculate_defaults, get_benchmark_data, electrolyzer_rating
 from .models import ElectricityProductionBenchmark, CO2EmissionsBenchmark
 from plotly.offline import plot
 import plotly.graph_objects as go
@@ -10,10 +10,12 @@ def home(request):
     return render(request, 'home.html')
 
 def hydrogen_production_view(request):
+    print("View function called")
     # Initialize the context with a form instance
     context = {'form': HydrogenProductionForm()}
 
     if request.method == 'POST':
+        print("POST request received")
 
         if 'reset' in request.POST:
             # If the user clicked the reset button, then reset the form 
@@ -33,33 +35,29 @@ def hydrogen_production_view(request):
             form = HydrogenProductionForm(request.POST)
             if form.is_valid():
                 # Get the data from the form, and then process the data in form.cleaned_data
-                # h2 emissions per source
-                h2_from_natural_gas = form.cleaned_data['h2_from_natural_gas']
-                h2_from_coal = form.cleaned_data['h2_from_coal']
-                h2_from_oil = form.cleaned_data['h2_from_oil']
-                h2_from_electrolysis = form.cleaned_data['h2_from_electrolysis']
 
                 # CO2 emissions of electricity generation per source
-                co2_emission_per_kwh_fossil = form.cleaned_data['co2_emission_per_kwh_fossil']
-                co2_emission_per_kwh_renewable = form.cleaned_data['co2_emission_per_kwh_renewable']
-
+                co2_emission_per_kwh_fossil = form.cleaned_data['hiddenCO2Emission']
+  
                 # Production, Efficiency, etc.
-                total_h2_production = form.cleaned_data['total_h2_production']
-                electrolyzer_efficiency = form.cleaned_data['electrolyzer_efficiency']
-                renewable_percentage = form.cleaned_data['renewable_percentage']
+                total_h2_production = form.cleaned_data['hiddenH2Production']
+                electrolyzer_efficiency = form.cleaned_data['hiddenElectrolyzerEff']
+                renewable_percentage = form.cleaned_data['hiddenRenewablePct']
 
                 # state of CO2 emissions
                 current_state_co2_emission = current_total_co2_emissions(total_h2_production)
 
                 # calculations for the new state of H2 production, 
                 # how much CO2 emission is reduced, and how much electricity is required 
-                total_electricity_requirement, total_co2_emissions, co2_emissions_reduction = calculate_outputs(
+                total_electricity_requirement, total_co2_emissions, co2_emissions_reduction, total_h2_production, required_electrolyzer_units = calculate_outputs(
                 total_h2_production, electrolyzer_efficiency, renewable_percentage, 
-                co2_emission_per_kwh_fossil, co2_emission_per_kwh_renewable, current_state_co2_emission)
+                co2_emission_per_kwh_fossil, current_state_co2_emission, electrolyzer_rating)
 
                 # round the total_electricity_requirement and total_co2_emissions
                 rounded_total_electricity_requirement = round(total_electricity_requirement)
                 rounded_total_co2_emissions = round(total_co2_emissions)
+                rounded_total_h2_production = round(total_h2_production)
+                required_electrolyzer_units = round(required_electrolyzer_units)
 
 
                 # Create the bar chart
@@ -176,18 +174,22 @@ def hydrogen_production_view(request):
                     'total_electricity_requirement': rounded_total_electricity_requirement,
                     'total_co2_emissions': total_co2_emissions,
                     'co2_emissions_reduction': co2_emissions_reduction,
+                    'total_h2_production': rounded_total_h2_production,
+                    'required_electrolyzer_units': required_electrolyzer_units,
                     'electricity_chart_html': electricity_chart_html,
                     'co2_chart_html': co2_chart_html,
                 }
+                print(f'total_electricity_requirement: {rounded_total_electricity_requirement}')
                 print(rounded_total_co2_emissions)
                 print(co2_benchmark_data)
                 print(request.POST)
-                print(request.POST.get('h2_from_coal'))
+
                 # Render the template with context
                 return render(request, 'h2_prod/hydrogen_production.html', context)
 
             # If the form is not valid, then render the form with errors
             else:
+                print('form is not valid')
                 context = {'form': form}
                 print(request.POST)
     

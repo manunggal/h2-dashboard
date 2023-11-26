@@ -12,6 +12,8 @@ from django.apps import apps
 # constant
 kwh_per_kg_h2 = 33.3  # kWh required per kg of H2 on a LHV basis, it's almost like a constant
 default_total_h2_production = 120  # megatonnes per year
+electrolyzer_rating = 20 # MW ref https://hydrogentechworld.com/worlds-largest-pem-electrolyzer-installed-in-canada
+
 
 # current state of H2 production
 def current_total_co2_emissions(total_h2_production):
@@ -49,21 +51,22 @@ def calculate_outputs(total_h2_production,
                       electrolyzer_efficiency,
                       percentage_renewable_electricity, 
                       co2_emission_per_kwh_fossil,
-                      co2_emission_per_kwh_renewable,
-                      current_state_co2_emission):
+                      current_state_co2_emission,
+                      electrolyzer_rating):
     
     electricity_per_kg_h2 = kwh_per_kg_h2 / (electrolyzer_efficiency / 100)
     total_electricity_requirement = electricity_per_kg_h2 * total_h2_production * 1e9  # Conversion to kg
 
     fossil_electricity_percentage = 1 - (percentage_renewable_electricity / 100)
     co2_emission_fossil = total_electricity_requirement * fossil_electricity_percentage * co2_emission_per_kwh_fossil
-    co2_emission_renewable = total_electricity_requirement * (percentage_renewable_electricity / 100) * co2_emission_per_kwh_renewable
+    
 
-    total_co2_emissions = co2_emission_fossil + co2_emission_renewable
+    total_co2_emissions = co2_emission_fossil
     co2_emissions_reduction = current_state_co2_emission - (total_co2_emissions * 1e-9)  # Conversion to Mega tonnes for both
 
-    # return total_electricity_requirement * 1e-9, total_co2_emission * 1e-9, co2_emission_reduction, co2_emission_fossil * 1e-9, co2_emission_renewable * 1e-9
-    return total_electricity_requirement * 1e-9, total_co2_emissions * 1e-9, co2_emissions_reduction
+    required_electrolyzer_units = (total_electricity_requirement*1e-3)/(electrolyzer_rating * 8760) # electricity in kwh, electrolyzer rating in MW, 8760 hours in a year
+    
+    return total_electricity_requirement * 1e-9, total_co2_emissions * 1e-9, co2_emissions_reduction, total_h2_production, required_electrolyzer_units
 
 
 def calculate_defaults():

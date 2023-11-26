@@ -32,6 +32,7 @@
 
   <!-- CSS Classes for the content -->
   <style>.slider-title {font-size: small; font-weight: normal;}</style>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   <!-- Plotly JavaScript Library -->
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
@@ -82,9 +83,9 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
-      <img src="{% static 'assets/dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+      <img src="{% static 'assets/dist/img/H2appLogo.jpg' %}" alt="H2App Logo" class="brand-image img-circle elevation-3"
            style="opacity: .8">
-      <span class="brand-text font-weight-light">H2 Production</span>
+      <span class="brand-text font-weight-light">Hydrogen</span>
     </a>
 
     <!-- Sidebar -->
@@ -92,10 +93,10 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{% static 'assets/dist/img/user2-160x160.jpg' %}" class="img-circle elevation-2" alt="User Image">
+          <img src="{% static 'assets/dist/img/DALL·E 2023-11-26- baby husky.jpg' %}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block">Guest</a>
         </div>
       </div>
 
@@ -104,48 +105,13 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item has-treeview menu-open">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Test Dashboard
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="./index.html" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v1</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./index2.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v2</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./index3.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v3</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+          <button id="resetButton" class="btn btn-primary">Reset</button>
           <li class="nav-item">
             <a href="pages/widgets.html" class="nav-link">
               <i class="fa-solid fa-book"></i>
-              <p>
-                References
-                
-              </p>
+              <p>References </p>
             </a>
           </li>
-          <button id="resetButton" class="btn btn-primary">Reset</button>
-          <li></li>
-          <button id="calculateButton" class="btn btn-primary">Calculate</button>
-
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -197,7 +163,7 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>{{ total_h2_production|floatformat:0 }} Megatonnes</h3>
+                <h3>{{ total_h2_production|floatformat:0 }} <span class="small-font">Megatonnes</span></h3>
                 <p>Total Hydrogen Production</p>
               </div>
               <div class="icon">
@@ -211,9 +177,9 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>{{ number_of_electrolyzers|floatformat:0 }}</h3>
+                <h3>{{ required_electrolyzer_units|floatformat:0 }} units</h3>
 
-                <p>Required Electrolyzers</p>
+                <p>Required Electrolyzers @20 MW</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person-add"></i>
@@ -226,7 +192,7 @@
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3>{{ total_co2_emissions|floatformat:0 }}</h3>
+                <h3>{{ total_co2_emissions|floatformat:0 }}<span class="small-font">Megatonnes</span></h3>
                 <p>Total CO2e Emissions</p>
               </div>
               <div class="icon">
@@ -301,48 +267,40 @@
           </div>
 
           <div class="row">
-            <!-- Column for the CO2e Emissions Sliders -->
+            <!-- H2 Production & Electrolyzer Efficiency -->
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        CO2e Emissions of H2 Production Based on Source
+                        H2 Production & Electrolyzer Efficiency
                     </div>
                     <div class="card-body">
-                        <!-- coal -->
-                        <label for="sliderCoal" class="slider-title">Derived from Coal</label>
-                        <input type="text" id="sliderCoal" name="h2_from_coal">
-                        <!-- Oil -->
-                        <label for="sliderOil" class="slider-title">Derived from Oil</label>
-                        <input type="text" id="sliderOil" name="h2_from_oil">
-                        <!-- Natural Gas -->
-                        <label for="sliderNatGas" class="slider-title">Derived from Natural Gas</label>
-                        <input type="text" id="sliderNatGas" name="h2_from_natural_gas">
-                        <!-- Produced from Electrolysis -->
-                        <label for="sliderElectrolysis" class="slider-title">Produced from Electrolysis</label>
-                        <input type="text" id="sliderElectrolysis" name="h2_from_electrolysis">
+                        <!-- Total H2 Production rate -->
+                        <label for="visibleH2Production" class="slider-title">Total Hydrogen Production</label>
+                        <input type="text" id="visibleH2Production" name="visibleH2Production" value=""/>
+                        <input type="hidden" id="hiddenH2Production" name="hiddenH2Production" value="">
+                        <!-- electrolyzer_efficiency  -->
+                        <label for="visibleElectrolyzerEff" class="slider-title">Electrolyzer Efficiency</label>
+                        <input type="text" id="visibleElectrolyzerEff" name="visibleElectrolyzerEff" value=""/>
+                        <input type="hidden" id="hiddenElectrolyzerEff" name="hiddenElectrolyzerEff" value="">
                     </div>
                 </div>
             </div>
             
-            <!-- ... other columns or content ... -->
+            <!-- ... Grid Renewable Portion & CO2e Emissions... -->
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        Other Inputs
+                        Grid Renewable Portion & CO2e Emissions
                     </div>
                     <div class="card-body">
-                        <!-- Total H2 Production rate -->
-                        <label for="SliderH2Production" class="slider-title">Total Hydrogen Production</label>
-                        <input type="text" id="SliderH2Production" name="SliderH2Production" value=""/>
-                        <!-- electrolyzer_efficiency  -->
-                        <label for="SliderElectrolyzerEff" class="slider-title">Electrolyzer Efficiency</label>
-                        <input type="text" id="SliderElectrolyzerEff" name="SliderElectrolyzerEff" value=""/>
                         <!-- renewable_percentage  -->
-                        <label for="SliderRenewablePct" class="slider-title">Renewable Percentage</label>
-                        <input type="text" id="SliderRenewablePct" name="SliderRenewablePct" value=""/>
+                        <label for="visibleRenewablePct" class="slider-title">Renewable Percentage</label>
+                        <input type="text" id="visibleRenewablePct" name="visibleRenewablePct" value=""/>
+                        <input type="hidden" id="hiddenRenewablePct" name="hiddenRenewablePct" value="">
                         <!-- co2_emission_per_kwh_fossil  -->
-                        <label for="SliderCO2Emiss" class="slider-title">CO2e Emission per kWh Fossil</label>
-                        <input type="text" id="SliderCO2Emiss" name="SliderCO2Emiss" value=""/>
+                        <label for="visibleCO2Emission" class="slider-title">CO2e Emission per kWh Fossil</label>
+                        <input type="text" id="visibleCO2Emission" name="visibleCO2Emission" value=""/>
+                        <input type="hidden" id="hiddenCO2Emission" name="hiddenCO2Emission" value="">
                     </div>
                 </div>
             </div>
@@ -425,57 +383,25 @@
 <!--Functions for the input sliders -->
 <script>
   $(document).ready(function() {
-      $("#sliderCoal").ionRangeSlider({
-          min: 22,
-          max: 26,
-          from: 24,  // default value
-          type: 'single',
-          step: 1,
-          postfix: ' Kg CO2e/kg H2',
-          prettify: false,
-          hasGrid: true
-      });
-      $("#sliderOil").ionRangeSlider({
-          min: 16,
-          max: 20,
-          from: 18,  // default value
-          type: 'single',
-          step: 1,
-          postfix: ' Kg CO2e/kg H2',
-          prettify: false,
-          hasGrid: true
-      });
-      $("#sliderNatGas").ionRangeSlider({
-          min: 10,
-          max: 14,
-          from: 12,  // default value
-          type: 'single',
-          step: 1,
-          postfix: ' Kg CO2e/kg H2',
-          prettify: false,
-          hasGrid: true
-      });
-      $("#sliderElectrolysis").ionRangeSlider({
-          min: 20,
-          max: 24,
-          from: 22,  // default value
-          type: 'single',
-          step: 1,
-          postfix: ' Kg CO2e/kg H2',
-          prettify: false,
-          hasGrid: true
-      });
-      $("#SliderH2Production").ionRangeSlider({
+      $("#visibleH2Production").ionRangeSlider({
           min: 0,
           max: 200,
           from: 90,  // default value
           type: 'single',
           step: 1,
-          postfix: ' Mega Tonnes',
+          postfix: ' MegaTonnes',
           prettify: false,
-          hasGrid: true
-      });
-      $("#SliderElectrolyzerEff").ionRangeSlider({
+          hasGrid: true,
+          onFinish: function (data) {
+            // update hidden input on slider change
+            $("#hiddenH2Production").val(data.from);
+          }
+        });
+      // Set the initial value of the hidden input to match the slider's default
+      $('#hiddenH2Production').val(90);
+
+      
+      $("#visibleElectrolyzerEff").ionRangeSlider({
           min: 0,
           max: 100,
           from: 70,  // default value
@@ -483,9 +409,16 @@
           step: 1,
           postfix: ' %',
           prettify: false,
-          hasGrid: true
-      });
-      $("#SliderRenewablePct").ionRangeSlider({
+          hasGrid: true,
+          onFinish: function (data) {
+            // update hidden input on slider change
+            $("#hiddenElectrolyzerEff").val(data.from);
+          }
+        });
+      // Set the initial value of the hidden input to match the slider's default
+      $('#hiddenElectrolyzerEff').val(70);
+      
+      $("#visibleRenewablePct").ionRangeSlider({
           min: 0,
           max: 100,
           from: 30,  // https://www.iea.org/energy-system/renewables#:~:text=In%20total%2C%20in%202022%20non,aligned%20with%20the%20NZE%20Scenario.
@@ -493,19 +426,32 @@
           step: 1,
           postfix: ' %',
           prettify: false,
-          hasGrid: true
-      });
-      $("#SliderCO2Emiss").ionRangeSlider({
+          hasGrid: true,
+          onFinish: function (data) {
+            // update hidden input on slider change
+            $("#hiddenRenewablePct").val(data.from);
+          }
+        });
+      // Set the initial value of the hidden input to match the slider's default
+      $('#hiddenRenewablePct').val(30);
+
+      $("#visibleCO2Emission").ionRangeSlider({
           min: 0.0,
           max: 1,
-          from: 0.44,  // https://ourworldindata.org/grapher/carbon-intensity-electricity?tab=chart
+          from: 0.47,  // https://ourworldindata.org/grapher/carbon-intensity-electricity?tab=chart
           type: 'single',
           step: 0.01,
           postfix: ' Kg',
           prettify: false,
-          hasGrid: true
-      });
-      
+          hasGrid: true,
+          onFinish: function (data) {
+            // update hidden input on slider change
+            $("#hiddenCO2Emission").val(data.from);
+          }
+        });
+      // Set the initial value of the hidden input to match the slider's default
+      $('#hiddenCO2Emission').val(0.47);
+     
   });
   </script>
 
