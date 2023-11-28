@@ -10,13 +10,13 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome-free/css/all.min.css' %}">
   <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/7.1.0/css/ionicons.min.css">
+  <!-- <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/7.1.0/css/ionicons.min.css"> -->
   <!-- Tempusdominus Bbootstrap 4 -->
   <link rel="stylesheet" href="{% static 'assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
   <!-- iCheck -->
   <link rel="stylesheet" href="{% static 'assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
   <!-- JQVMap -->
-  <link rel="stylesheet" href="{% static 'assets/plugins/jqvmap/jqvmap.min.css' %}">
+  <!-- <link rel="stylesheet" href="{% static 'assets/plugins/jqvmap/jqvmap.min.css' %}"> -->
   <!-- Theme style -->
   <link rel="stylesheet" href="{% static 'assets/dist/css/adminlte.min.css' %}">
   <!-- overlayScrollbars -->
@@ -354,8 +354,8 @@
 <!-- Sparkline -->
 <script src="{% static 'assets/plugins/sparklines/sparkline.js' %}"></script>
 <!-- JQVMap -->
-<script src="{% static 'assets/plugins/jqvmap/jquery.vmap.min.js' %}"></script>
-<script src="{% static 'assets/plugins/jqvmap/maps/jquery.vmap.usa.js' %}"></script>
+<!-- <script src="{% static 'assets/plugins/jqvmap/jquery.vmap.min.js' %}"></script> -->
+<!-- <script src="{% static 'assets/plugins/jqvmap/maps/jquery.vmap.usa.js' %}"></script> -->
 <!-- jQuery Knob Chart -->
 <script src="{% static 'assets/plugins/jquery-knob/jquery.knob.min.js' %}"></script>
 <!-- daterangepicker -->
@@ -370,7 +370,7 @@
 <!-- AdminLTE App -->
 <script src="{% static 'assets/dist/js/adminlte.js' %}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{% static 'assets/dist/js/pages/dashboard.js' %}"></script>
+<!-- <script src="{% static 'assets/dist/js/pages/dashboard.js' %}"></script> -->
 <!-- AdminLTE for demo purposes -->
 <script src="{% static 'assets/dist/js/demo.js' %}"></script>
 <!-- Javascript Tag -->
@@ -393,8 +393,7 @@
           prettify: false,
           hasGrid: true,
           onFinish: function (data) {
-            // update hidden input on slider change
-            $("#hiddenH2Production").val(data.from);
+              sendSliderValues("visibleH2Production", data);
           }
         });
       // Set the initial value of the hidden input to match the slider's default
@@ -411,8 +410,7 @@
           prettify: false,
           hasGrid: true,
           onFinish: function (data) {
-            // update hidden input on slider change
-            $("#hiddenElectrolyzerEff").val(data.from);
+              sendSliderValues("visibleElectrolyzerEff", data);
           }
         });
       // Set the initial value of the hidden input to match the slider's default
@@ -428,8 +426,7 @@
           prettify: false,
           hasGrid: true,
           onFinish: function (data) {
-            // update hidden input on slider change
-            $("#hiddenRenewablePct").val(data.from);
+              sendSliderValues("visibleRenewablePct", data);
           }
         });
       // Set the initial value of the hidden input to match the slider's default
@@ -445,13 +442,64 @@
           prettify: false,
           hasGrid: true,
           onFinish: function (data) {
-            // update hidden input on slider change
-            $("#hiddenCO2Emission").val(data.from);
+              sendSliderValues("visibleCO2Emission", data);
           }
         });
       // Set the initial value of the hidden input to match the slider's default
       $('#hiddenCO2Emission').val(0.47);
      
+      // Function to get CSRF token from a cookie
+      function getCsrfToken() {
+        var name = 'csrftoken';
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+      
+      // Function to send slider values to the server
+      function sendSliderValues(sliderId, data) {
+        // update the hidden input for the current slider
+        var hiddenInputId = sliderId.replace("visible", "hidden");
+        $("#" + hiddenInputId).val(data.from);
+
+        // logging the data before AJAX call
+        console.log("Sending data:", {
+        'csrfmiddlewaretoken': "{{ csrf_token }}",
+        [hiddenInputId]: data.from
+        });
+
+        // Get the slider values
+        var hiddenH2Production = $('#hiddenH2Production').val();
+        var hiddenElectrolyzerEff = $('#hiddenElectrolyzerEff').val();
+        var hiddenRenewablePct = $('#hiddenRenewablePct').val();
+        var hiddenCO2Emission = $('#hiddenCO2Emission').val();
+        // AJAX call
+        $.ajax({
+          type: "POST",
+          url: "http://localhost:8000/h2_prod/hydrogen-production/",
+          data: {
+            'csrfmiddlewaretoken': "{{ csrf_token }}",
+            'hiddenH2Production': hiddenH2Production,
+            'hiddenElectrolyzerEff': hiddenElectrolyzerEff,
+            'hiddenRenewablePct': hiddenRenewablePct,
+            'hiddenCO2Emission': hiddenCO2Emission
+          },
+          success: function (data) {
+            console.log("AJAX call triggered")
+            console.log(data);
+          }
+        });
+      }
+
   });
   </script>
 
@@ -482,11 +530,11 @@
     Plotly.newPlot('co2-emissions-plot', data2, layout2);
   </script>
 
-<script>
+<!-- <script>
   document.getElementById('calculateButton').addEventListener('click', function() {
       document.getElementById('inputForm').submit();
   });
-</script>
+</script> -->
   
   
 

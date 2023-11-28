@@ -30,7 +30,7 @@ def current_total_co2_emissions(total_h2_production):
     co2_per_kg_electro = 22  # kg CO2e per kg H2
 
     # Convert total hydrogen production from megatonnes to kilograms (1 megatonne = 1,000,000,000 kg)
-    total_h2_prod_kg = total_h2_production * 1e9
+    total_h2_prod_kg = float(total_h2_production) * 1e9
 
     # Calculating the CO2 emissions from each source
     co2_emissions_gas = total_h2_prod_kg * percentage_gas * co2_per_kg_gas
@@ -106,4 +106,19 @@ def get_benchmark_data():
             benchmark_data[key].append((benchmark.value, benchmark.name))
     return benchmark_data
 
+# to convert request.POST elements to float
+def post_floater(post_data):
+    for key, value in post_data.items():
+        if key != 'csrfmiddlewaretoken':
+            try:
+                post_data[key] = float(value)
+            except ValueError:
+                # Handle the case where conversion fails
+                print(f"Value conversion failed for key: {key}")
+                post_data[key] = None  # or handle this differently as per your need
 
+    # Logging the converted values and their types
+    # for key, value in post_data.items():
+    #     print(f"{key}: {value}, Type: {type(value)}")
+    
+    return post_data

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Page</title>
+    <!-- Include jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Include ionRangeSlider CSS and JS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
+    <!-- CSRF Token Setup for AJAX -->
+    <script>
+        // Setup CSRF token for AJAX POST requests
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+    </script>
+</head>
+<body>
+
+<!-- Slider HTML -->
+<label for="visibleH2Production">Total Hydrogen Production</label>
+<input type="text" id="visibleH2Production" name="visibleH2Production" value=""/>
+<input type="hidden" id="hiddenH2Production" name="hiddenH2Production" value="">
+
+<!-- JavaScript for Slider and AJAX -->
+<script>
+$(document).ready(function() {
+    $("#visibleH2Production").ionRangeSlider({
+        min: 0,
+        max: 200,
+        from: 90,  // default value
+        type: 'single',
+        step: 1,
+        postfix: ' MegaTonnes',
+        prettify: false,
+        hasGrid: true,
+        onFinish: function (data) {
+            // update hidden input on slider change
+            $("#hiddenH2Production").val(data.from);
+
+            // AJAX call
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:8000/h2_prod/test/",
+                data: {
+                    'csrfmiddlewaretoken': csrftoken,
+                    'hiddenH2Production': data.from
+                },
+                success: function (response) {
+                    console.log(response);
+                }
+            });
+        }
+    });
+
+    // Set the initial value of the hidden input to match the slider's default
+    $('#hiddenH2Production').val(90);
+});
+</script>
+
+</body>
+</html>

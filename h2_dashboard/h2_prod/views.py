@@ -1,21 +1,32 @@
 from django.shortcuts import render
 # from django.contrib import messages
 from .forms import HydrogenProductionForm
-from .h2_functions import calculate_outputs, current_total_co2_emissions, calculate_defaults, get_benchmark_data, electrolyzer_rating
+from .h2_functions import calculate_outputs, current_total_co2_emissions, calculate_defaults, get_benchmark_data, electrolyzer_rating, post_floater
 from .models import ElectricityProductionBenchmark, CO2EmissionsBenchmark
 from plotly.offline import plot
 import plotly.graph_objects as go
+from django.http import HttpResponse
+import json
+
+
 
 def home(request):
     return render(request, 'home.html')
 
 def hydrogen_production_view(request):
     print("View function called")
+    print("Request method:", request.method)
     # Initialize the context with a form instance
     context = {'form': HydrogenProductionForm()}
 
     if request.method == 'POST':
         print("POST request received")
+        print("Post Data:", request.POST)
+
+        post_data = request.POST.copy()
+        post_data = post_floater(post_data)
+
+
 
         if 'reset' in request.POST:
             # If the user clicked the reset button, then reset the form 
@@ -32,17 +43,17 @@ def hydrogen_production_view(request):
         else:
             # If the user clicked the submit button, then process the data
             
-            form = HydrogenProductionForm(request.POST)
+            form = HydrogenProductionForm(post_data)
             if form.is_valid():
                 # Get the data from the form, and then process the data in form.cleaned_data
 
                 # CO2 emissions of electricity generation per source
-                co2_emission_per_kwh_fossil = form.cleaned_data['hiddenCO2Emission']
+                co2_emission_per_kwh_fossil = post_data.get('hiddenCO2Emission', None)
   
                 # Production, Efficiency, etc.
-                total_h2_production = form.cleaned_data['hiddenH2Production']
-                electrolyzer_efficiency = form.cleaned_data['hiddenElectrolyzerEff']
-                renewable_percentage = form.cleaned_data['hiddenRenewablePct']
+                total_h2_production = post_data.get('hiddenH2Production', None)
+                electrolyzer_efficiency = post_data.get('hiddenElectrolyzerEff', None)
+                renewable_percentage = post_data.get('hiddenRenewablePct', None)
 
                 # state of CO2 emissions
                 current_state_co2_emission = current_total_co2_emissions(total_h2_production)
@@ -182,7 +193,7 @@ def hydrogen_production_view(request):
                 print(f'total_electricity_requirement: {rounded_total_electricity_requirement}')
                 print(rounded_total_co2_emissions)
                 print(co2_benchmark_data)
-                print(request.POST)
+                print(total_h2_production)
 
                 # Render the template with context
                 return render(request, 'h2_prod/hydrogen_production.html', context)
@@ -190,6 +201,7 @@ def hydrogen_production_view(request):
             # If the form is not valid, then render the form with errors
             else:
                 print('form is not valid')
+                print("Form errors:", form.errors)
                 context = {'form': form}
                 print(request.POST)
     
@@ -198,4 +210,17 @@ def hydrogen_production_view(request):
 
 
 
+
+
+def generic_test_view(request):
+    if request.method == 'POST':
+        # Example of processing POST request
+        received_data = request.POST.get('hiddenH2Production', '')
+        print("Received data:", received_data)
+        response_data = {'status': 'success', 'message': 'Data received'}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+    
+    # If the request is not POST, you can return a simple HttpResponse
+    # return HttpResponse("This is a response from GET request.")
+    return render(request, 'h2_prod/test_page.html')
 
