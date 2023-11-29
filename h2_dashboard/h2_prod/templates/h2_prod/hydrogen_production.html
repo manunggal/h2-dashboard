@@ -49,7 +49,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index3.html" class="nav-link">Home</a>
+        <a href="index3.html" class="nav-link">Total Electricity Requirement: 123</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">Contact</a>
@@ -148,7 +148,7 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>{{ total_electricity_requirement|floatformat:0 }} TWh</h3>
+                <h3 id="displayTotalElectricityRequirement">-</h3>
                 <p>Total Electricity Requirements</p>
               </div>
               <div class="icon">
@@ -163,7 +163,7 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>{{ total_h2_production|floatformat:0 }} <span class="small-font">Megatonnes</span></h3>
+                <h3 id="displayTotalH2Production">-</h3>
                 <p>Total Hydrogen Production</p>
               </div>
               <div class="icon">
@@ -177,9 +177,8 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>{{ required_electrolyzer_units|floatformat:0 }} units</h3>
-
-                <p>Required Electrolyzers @20 MW</p>
+                <h3 id="displayRequiredElectrolyzerUnits">-</h3>
+                <p>Numbers of Required 20 MW Electrolyzers</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person-add"></i>
@@ -192,7 +191,7 @@
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3>{{ total_co2_emissions|floatformat:0 }}<span class="small-font">Megatonnes</span></h3>
+                <h3 id="displayTotalCO2eEmissions">-</h3>
                 <p>Total CO2e Emissions</p>
               </div>
               <div class="icon">
@@ -393,7 +392,7 @@
           prettify: false,
           hasGrid: true,
           onFinish: function (data) {
-              sendSliderValues("visibleH2Production", data);
+              updateDashboardData("visibleH2Production", data);
           }
         });
       // Set the initial value of the hidden input to match the slider's default
@@ -410,7 +409,7 @@
           prettify: false,
           hasGrid: true,
           onFinish: function (data) {
-              sendSliderValues("visibleElectrolyzerEff", data);
+              updateDashboardData("visibleElectrolyzerEff", data);
           }
         });
       // Set the initial value of the hidden input to match the slider's default
@@ -426,7 +425,7 @@
           prettify: false,
           hasGrid: true,
           onFinish: function (data) {
-              sendSliderValues("visibleRenewablePct", data);
+              updateDashboardData("visibleRenewablePct", data);
           }
         });
       // Set the initial value of the hidden input to match the slider's default
@@ -442,7 +441,7 @@
           prettify: false,
           hasGrid: true,
           onFinish: function (data) {
-              sendSliderValues("visibleCO2Emission", data);
+              updateDashboardData("visibleCO2Emission", data);
           }
         });
       // Set the initial value of the hidden input to match the slider's default
@@ -466,7 +465,7 @@
       }
       
       // Function to send slider values to the server
-      function sendSliderValues(sliderId, data) {
+      function updateDashboardData(sliderId, data) {
         // update the hidden input for the current slider
         var hiddenInputId = sliderId.replace("visible", "hidden");
         $("#" + hiddenInputId).val(data.from);
@@ -493,9 +492,12 @@
             'hiddenRenewablePct': hiddenRenewablePct,
             'hiddenCO2Emission': hiddenCO2Emission
           },
-          success: function (data) {
+          success: function (response) {
             console.log("AJAX call triggered")
-            console.log(data);
+            $('#displayTotalElectricityRequirement').text(response.total_electricity_requirement + ' TWh');
+            $('#displayTotalH2Production').text(response.total_h2_production + ' MegaTonnes');
+            $('#displayRequiredElectrolyzerUnits').text(response.required_electrolyzer_units + ' Units');
+            $('#displayTotalCO2eEmissions').text(response.total_co2_emissions + ' MegaTonnes');
           }
         });
       }
