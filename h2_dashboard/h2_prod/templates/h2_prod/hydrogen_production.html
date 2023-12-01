@@ -49,7 +49,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index3.html" class="nav-link">Total Electricity Requirement: 123</a>
+        <a href="index3.html" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">Contact</a>
@@ -205,57 +205,7 @@
         <!-- /.row -->
 
         <!-- Main row -->
-        <div class="row">
-          <!-- Electricity Plot -->
-          <section class="col-lg-6 connectedSortable ui-sortable">
-            <div class="card">
-              <!-- card header -->
-              <div class="card-header ui-sortable-handle" style="cursor: move;">
-                <h3 class="card-title">
-                <i class="fas fa-chart-pie mr-1"></i>
-                Electricity Requirements
-                </h3>
-                <div class="card-tools"></div>
-              </div>
-              <!-- card body -->
-              <div class="card-body">
-                <div id="electricity-requirements-plot"></div>
-              </div>
-          </section>
-          <!-- CO2 emissions plot -->
-          <section class="col-lg-6">
-            <div class="card">
-              <!-- card header -->
-              <div class="card-header">
-                <h3 class="card-title">
-                  <i class="fas fa-chart-pie mr-1"></i>
-                  CO2e Emissions 
-                </h3>
-              </div>
-              <!-- card body -->
-              <div class="card-body">
-                <div id="co2-emissions-plot"></div>
-            </div>
-          </section>
-        </div>
-
-
-        <!-- Electricity & CO2e Emissions Plot -->
-        <div class="container-fluid">
-          <div class="row">
-            <!-- Required Electricity -->
-            <div class="col-lg-6">
-              <div id="electricity-requirements-plot"></div>
-            </div>
-            <!-- CO2e emissions -->
-            <div class="col-lg-6">
-              <div id="co2-emissions-plot"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Start of the new row for sliders and other inputs -->
-        
+                <!-- Start of the new row for sliders and other inputs -->
         <!-- The form tag -->
         <form method="post" id="inputForm">
           {% csrf_token %}
@@ -310,10 +260,48 @@
             <!-- <button type="submit" class="btn btn-primary">Calculate</button> -->
           </div>
         </form>
-
-
-
         <!-- End of the new row -->
+
+
+
+
+        <div class="row">
+          <!-- Electricity Plot -->
+          <section class="col-lg-6 connectedSortable ui-sortable">
+            <div class="card">
+              <!-- card header -->
+              <div class="card-header ui-sortable-handle" style="cursor: move;">
+                <h3 class="card-title">
+                <i class="fas fa-chart-pie mr-1"></i>
+                Electricity Requirements
+                </h3>
+                <div class="card-tools"></div>
+              </div>
+              <!-- card body -->
+              <div class="card-body">
+                <div id="electricity-requirements-plot"></div>
+              </div>
+          </section>
+          <!-- CO2 emissions plot -->
+          <section class="col-lg-6">
+            <div class="card">
+              <!-- card header -->
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-chart-pie mr-1"></i>
+                  CO2e Emissions 
+                </h3>
+              </div>
+              <!-- card body -->
+              <div class="card-body">
+                <div id="co2-emissions-plot"></div>
+            </div>
+          </section>
+        </div>
+
+
+
+
      
 
         <!-- /.row (main row) -->
