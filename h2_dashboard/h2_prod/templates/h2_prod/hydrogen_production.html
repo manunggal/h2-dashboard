@@ -105,7 +105,13 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <button id="resetButton" class="btn btn-primary">Reset</button>
+          <!-- form for reset action -->
+          <form method="post" action="{% url 'hydrogen_production' %}">
+            {% csrf_token %}
+            <!-- Hidden input to indicate a reset action -->
+            <input type="hidden" name="reset" value="true">
+            <button type="submit" id="resetButton" class="btn btn-primary">Reset</button>
+          </form>
           <li class="nav-item">
             <a href="pages/widgets.html" class="nav-link">
               <i class="fa-solid fa-book"></i>
@@ -208,7 +214,7 @@
 
         <!-- Main row -->
                 <!-- Start of the new row for sliders and other inputs -->
-        <!-- The form tag -->
+        <!-- form for input slider-->
         <form method="post" id="inputForm">
           {% csrf_token %}
 
