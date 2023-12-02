@@ -148,7 +148,8 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3 id="displayTotalElectricityRequirement">-</h3>
+                <!-- <h3 id="displayTotalElectricityRequirement">-</h3> -->
+                <h3 id="displayTotalElectricityRequirement">{{ initial_total_electricity_requirement }} TWh</h3>
                 <p>Total Electricity Requirements</p>
               </div>
               <div class="icon">
@@ -163,7 +164,8 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3 id="displayTotalH2Production">-</h3>
+                <!-- <h3 id="displayTotalH2Production">-</h3> -->
+                <h3 id="displayTotalH2Production">{{ initial_h2_production }} MegaTonnes</h3>
                 <p>Total Hydrogen Production</p>
               </div>
               <div class="icon">
@@ -177,7 +179,7 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3 id="displayRequiredElectrolyzerUnits">-</h3>
+                <h3 id="displayRequiredElectrolyzerUnits">{{ initial_required_electrolyzer_units }} Units</h3>
                 <p>Numbers of Required 20 MW Electrolyzers</p>
               </div>
               <div class="icon">
@@ -191,7 +193,7 @@
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3 id="displayTotalCO2eEmissions">-</h3>
+                <h3 id="displayTotalCO2eEmissions">{{ initial_total_co2_emissions }} MegaTonnes</h3>
                 <p>Total CO2e Emissions</p>
               </div>
               <div class="icon">
@@ -226,7 +228,7 @@
                         <!-- Total H2 Production rate -->
                         <label for="visibleH2Production" class="slider-title">Total Hydrogen Production</label>
                         <input type="text" id="visibleH2Production" name="visibleH2Production" value=""/>
-                        <input type="hidden" id="hiddenH2Production" name="hiddenH2Production" value="">
+                        <input type="hidden" id="hiddenH2Production" name="hiddenH2Production" value="{{ initial_h2_production }}">
                         <!-- electrolyzer_efficiency  -->
                         <label for="visibleElectrolyzerEff" class="slider-title">Electrolyzer Efficiency</label>
                         <input type="text" id="visibleElectrolyzerEff" name="visibleElectrolyzerEff" value=""/>

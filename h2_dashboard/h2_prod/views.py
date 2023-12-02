@@ -14,11 +14,35 @@ def home(request):
     return render(request, 'home.html')
 
 def hydrogen_production_view(request):
+    #  debugging
     print("View function called")
     print("Request method:", request.method)
-    # Initialize the context with a form instance
-    context = {'form': HydrogenProductionForm()}
 
+    
+    # initial values
+    initial_values = {
+        'initial_h2_production': 90,  # MegaTonnes
+        'initial_electrolyzer_efficiency': 70,  # Percent
+        'initial_renewable_percentage': 30,  # Percent
+        'initial_co2_emission_per_kwh_fossil': 0.47,  # kg
+        'initial_total_electricity_requirement': 4281,  # TWh
+        'initial_required_electrolyzer_units': 24437,  # Units
+        'initial_total_co2_emissions': 1409  # MegaTonnes
+    }
+
+    # context initialization
+    context = {'form': HydrogenProductionForm()}
+    context.update(initial_values)
+
+    #  reset functionality, return all the values to initial_values
+    if request.method == 'POST' and 'reset' in request.POST:
+        print("Reset button clicked")
+        # Reset the form with initial values
+        context = {'form': HydrogenProductionForm(initial=initial_values)}
+        context.update(initial_values)
+        return render(request, 'h2_prod/hydrogen_production.html', context)
+
+    # calculation and updating values when the sliders are moved
     if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         print("POST request received")
         print("Post Data:", request.POST)
