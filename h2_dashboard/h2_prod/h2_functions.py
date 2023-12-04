@@ -1,5 +1,10 @@
 
 from django.apps import apps
+import plotly
+from plotly.offline import plot
+from plotly.graph_objs import Bar, Layout
+import plotly.graph_objects as go
+import json
 
 # dummy input data
 # total_h2_production = 90
@@ -75,17 +80,6 @@ def calculate_defaults():
     default_total_electricity_requirement = total_h2_prod_kg * 0.04 * 22
     return (default_total_electricity_requirement * 1e-9, default_total_co2_emissions, 0)
 
-# default_total_electricity_requirement, default_total_co2_emissions = calculate_defaults(default_total_h2_production)
-
-# total_electricity_requirement, total_co2_emission, co2_emission_reduction = calculate_outputs(
-#     total_h2_production, electrolyzer_efficiency, percentage_renewable_electricity, 
-#     co2_emission_per_kwh_fossil, co2_emission_per_kwh_renewable, current_state_co2_emission)
-
-# print(f'Total electricity required for clean hydrogen production: {total_electricity_requirement:.2f} tWh')
-# print(f'Total CO2 emission: {total_co2_emission:.2f} Mega tonnes per year')
-# print(f'CO2 emission reduction: {co2_emission_reduction:.2f} Mega tonnes per year')
-# print(f'Previous CO2 emission: {current_state_co2_emission:.2f} Mega tonnes per year')
-
 
 
 def get_benchmark_data():
@@ -122,3 +116,109 @@ def post_floater(post_data):
     #     print(f"{key}: {value}, Type: {type(value)}")
     
     return post_data
+
+def process_benchmark_data(benchmark_data, benchmark_key):
+    """
+    Processes benchmark data to extract and sort specific benchmark information.
+    
+    Args:
+    benchmark_data (dict): The dictionary containing all benchmark data.
+    benchmark_key (str): The key to identify which benchmark data to process.
+    
+    Returns:
+    list: A sorted list of tuples containing benchmark information.
+    """
+    benchmark_specific_data = sorted(
+        [(int(key.split('-')[1]), value, name)
+         for key, values in benchmark_data.items() if benchmark_key in key
+         for value, name in values],
+        key=lambda x: x[0]
+    )
+    return benchmark_specific_data
+
+def plotting_calc_vs_benchmark(data, benchmark, chart_title, chart_name):
+
+    # benchmark_colors
+    benchmark_colors = ['#d53e4f', '#f46d43', '#fdae61']
+    reversed_colors = benchmark_colors[::-1]
+
+    # prepare the data for the chart
+    chart_data = [
+        # Add the benchmark data to the chart
+        *[
+        go.Bar(
+            x = [f'{name}'],
+            y = [value],
+            name = f'Benchmark {year}',
+            marker = dict(color=reversed_colors[i])
+        )
+        for i, (year, value, name) in enumerate(benchmark[:3])
+        ],
+
+        # Add the calculated value to the chart
+        go.Bar(
+            x = ['Your Calculation'],
+            y = [data],
+            name = 'Your Calculation',
+            marker = dict(color='#3288bd')
+        )
+    ]
+
+    #  Generate plotly chart
+    chart_layout = go.Layout(
+        title = {'text': f'{chart_title} vs Benchmarks', 'x':0.5, 'xanchor':'center'},
+        xaxis = dict(title = 'Benchmark - Year'),
+        yaxis = dict(title = f'{chart_name}'),
+        showlegend = False
+    )
+
+    chart_fig = go.Figure(data=chart_data, layout=chart_layout)
+    chart_html = plot(chart_fig, output_type='div', include_plotlyjs=False)
+
+    return chart_html
+
+
+def update_plot_calc_vs_benchmark(data, benchmark, chart_title, chart_name):
+
+    # benchmark_colors
+    benchmark_colors = ['#d53e4f', '#f46d43', '#fdae61']
+    reversed_colors = benchmark_colors[::-1]
+
+    # prepare the data for the chart
+    chart_data = [
+        # Add the benchmark data to the chart
+        *[
+        go.Bar(
+            x = [f'{name}'],
+            y = [value],
+            name = f'Benchmark {year}',
+            marker = dict(color=reversed_colors[i])
+        )
+        for i, (year, value, name) in enumerate(benchmark[:3])
+        ],
+
+        # Add the calculated value to the chart
+        go.Bar(
+            x = ['Your Calculation'],
+            y = [data],
+            name = 'Your Calculation',
+            marker = dict(color='#3288bd')
+        )
+    ]
+
+    #  Generate plotly chart
+    chart_layout = go.Layout(
+        title = {'text': f'{chart_title} vs Benchmarks', 'x':0.5, 'xanchor':'center'},
+        xaxis = dict(title = 'Benchmark - Year'),
+        yaxis = dict(title = f'{chart_name}'),
+        showlegend = False
+    )
+
+    # Convert data and layout to JSON
+    chart_data = json.dumps(chart_data, cls=plotly.utils.PlotlyJSONEncoder)
+    chart_layout = json.dumps(chart_layout, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return chart_data, chart_layout
+
+
+    

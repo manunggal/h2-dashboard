@@ -287,7 +287,7 @@
               </div>
               <!-- card body -->
               <div class="card-body">
-                <div id="electricity-requirements-plot"></div>
+                <div id="electricity-requirements-plot">{{ electricity_chart_html | safe }}</div>
               </div>
           </section>
           <!-- CO2 emissions plot -->
@@ -302,7 +302,7 @@
               </div>
               <!-- card body -->
               <div class="card-body">
-                <div id="co2-emissions-plot"></div>
+                <div id="co2e-emissions-plot">{{ co2e_chart_html | safe }}</div>
             </div>
           </section>
         </div>
@@ -378,6 +378,22 @@
 <!--Functions for the input sliders -->
 <script>
   $(document).ready(function() {
+
+      // Static data for testing
+    // var testChartData = [{
+    //   x: ['Test 1', 'Test 2'],
+    //   y: [10, 15],
+    //   type: 'bar'
+    // }];
+
+    // var testChartLayout = {
+    //   title: 'Test Chart'
+    // };
+
+    // Plotly.newPlot("electricity-requirements-plot", testChartData, testChartLayout);
+
+
+
       $("#visibleH2Production").ionRangeSlider({
           min: 0,
           max: 200,
@@ -460,7 +476,7 @@
         return cookieValue;
       }
       
-      // Function to send slider values to the server
+      // Function to send slider values to the server and get the response (calculated values and plots)
       function updateDashboardData(sliderId, data) {
         // update the hidden input for the current slider
         var hiddenInputId = sliderId.replace("visible", "hidden");
@@ -477,6 +493,42 @@
         var hiddenElectrolyzerEff = $('#hiddenElectrolyzerEff').val();
         var hiddenRenewablePct = $('#hiddenRenewablePct').val();
         var hiddenCO2Emission = $('#hiddenCO2Emission').val();
+
+        // static data for chart testing
+        // var electricityChartData = [{
+        //   x: ['US Total Electricity 2021', 'World non_hydro Renewables 2022', 'The Calculation'],
+        //   y: [4153, 3444, 4281],
+        //   type: 'bar',
+        //   name: 'Electricity Benchmark',
+        //   marker: {
+        //     color: ['#fdae61', '#f46d43', '#3288bd']
+        //   } 
+        // }]
+
+        // var electricityChartLayout = {
+        //   title: 'Electricity Requirements',
+        //   xaxis: {
+        //     title: 'Benchmark  - Year',
+        //   },
+        //   yaxis: {
+        //     title: 'Total Electricity Requirement (TWh)',
+        //   },
+        //   showlegend: false
+        // }
+        
+        // // static data
+        // console.log("Static chart data: ", electricityChartData);
+        // console.log("Static chart layout: ", electricityChartLayout);
+
+        // dynamic data for chart
+        // var electricity_chart_data = JSON.parse(response.electricity_chart_data);
+        // var electricity_chart_layout = JSON.parse(response.electricity_chart_layout);
+
+        // logging the data before AJAX call for debugging
+        // dynamic data
+        // console.log("Dynamic chart data: ", electricity_chart_data);
+        // console.log("Dynamic chart layout: ", electricity_chart_layout);
+
         // AJAX call
         $.ajax({
           type: "POST",
@@ -489,11 +541,32 @@
             'hiddenCO2Emission': hiddenCO2Emission
           },
           success: function (response) {
+
+            // logging the response
             console.log("AJAX call triggered")
+            console.log("response data:", response);
+            
+
+            // console.log("electricity chart:", response.electricity_chart_data)
             $('#displayTotalElectricityRequirement').text(response.total_electricity_requirement + ' TWh');
             $('#displayTotalH2Production').text(response.total_h2_production + ' MegaTonnes');
             $('#displayRequiredElectrolyzerUnits').text(response.required_electrolyzer_units + ' Units');
             $('#displayTotalCO2eEmissions').text(response.total_co2_emissions + ' MegaTonnes');
+            // Parse the chart data and layout
+            var electricity_chart_data = JSON.parse(response.electricity_chart_data);
+            var electricity_chart_layout = JSON.parse(response.electricity_chart_layout);
+            var co2e_chart_data = JSON.parse(response.co2e_chart_data);
+            var co2e_chart_layout = JSON.parse(response.co2e_chart_layout);
+            // Update the plotly charts
+            Plotly.newPlot('electricity-requirements-plot', electricity_chart_data, electricity_chart_layout);
+            Plotly.newPlot('co2e-emissions-plot', co2e_chart_data, co2e_chart_layout);
+            // $('#electricity-requirements-plot').html(response.electricity_chart_html);
+            // $('#co2-emissions-plot').html(response.co2_chart_html);
+
+            // debugging
+            // console.log(response.electricity_chart_html);
+            console.log("Dynamic chart layout: ", electricity_chart_layout);
+
           }
         });
       }
@@ -501,32 +574,7 @@
   });
   </script>
 
-  <!-- Plotting script using Plotly -->
-  <script>
-    // Plot for Electricity Requirements
-    var trace1 = {
-      x: ['Actual', 'Benchmark'],
-      y: [150, 120],  // Replace with your data
-      type: 'bar'
-    };
   
-    var data1 = [trace1];
-    var layout1 = { title: 'Electricity Requirements' };
-  
-    Plotly.newPlot('electricity-requirements-plot', data1, layout1);
-  
-    // Plot for CO2 Emissions
-    var trace2 = {
-      x: ['Actual', 'Benchmark'],
-      y: [80, 60],  // Replace with your data
-      type: 'bar'
-    };
-  
-    var data2 = [trace2];
-    var layout2 = { title: 'Total CO2 Emissions' };
-  
-    Plotly.newPlot('co2-emissions-plot', data2, layout2);
-  </script>
 
 <!-- <script>
   document.getElementById('calculateButton').addEventListener('click', function() {
