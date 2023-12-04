@@ -30,9 +30,9 @@ class HydrogenProductionForm(forms.Form):
         widget=forms.NumberInput(attrs={'type': 'range', 'step': '1'})
     )
 
-    # sliders for CO2 emissions for fossil fuels in electric generation
-    hiddenCO2Emission = forms.FloatField(
-        label='CO2 Emission per kWh from Fossil Fuels',
+    # sliders for CO2e emissions for fossil fuels in electric generation
+    hiddenCO2eEmission = forms.FloatField(
+        label='CO2e Emission per kWh from Fossil Fuels',
         min_value=0.0,
         max_value=1.0,
         initial=0.47, # https://www.iea.org/reports/global-energy-co2-status-report-2019/emissions

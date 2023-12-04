@@ -199,7 +199,7 @@
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3 id="displayTotalCO2eEmissions">{{ initial_total_co2_emissions }} MegaTonnes</h3>
+                <h3 id="displayTotalCO2eEmissions">{{ initial_total_co2e_emissions }} MegaTonnes</h3>
                 <p>Total CO2e Emissions</p>
               </div>
               <div class="icon">
@@ -255,9 +255,9 @@
                         <input type="text" id="visibleRenewablePct" name="visibleRenewablePct" value=""/>
                         <input type="hidden" id="hiddenRenewablePct" name="hiddenRenewablePct" value="">
                         <!-- co2_emission_per_kwh_fossil  -->
-                        <label for="visibleCO2Emission" class="slider-title">CO2e Emission per kWh Fossil</label>
-                        <input type="text" id="visibleCO2Emission" name="visibleCO2Emission" value=""/>
-                        <input type="hidden" id="hiddenCO2Emission" name="hiddenCO2Emission" value="">
+                        <label for="visibleCO2eEmission" class="slider-title">CO2e Emission per kWh Fossil</label>
+                        <input type="text" id="visibleCO2eEmission" name="visibleCO2eEmission" value=""/>
+                        <input type="hidden" id="hiddenCO2eEmission" name="hiddenCO2eEmission" value="">
                     </div>
                 </div>
             </div>
@@ -290,7 +290,7 @@
                 <div id="electricity-requirements-plot">{{ electricity_chart_html | safe }}</div>
               </div>
           </section>
-          <!-- CO2 emissions plot -->
+          <!-- CO2e emissions plot -->
           <section class="col-lg-6">
             <div class="card">
               <!-- card header -->
@@ -443,7 +443,7 @@
       // Set the initial value of the hidden input to match the slider's default
       $('#hiddenRenewablePct').val(30);
 
-      $("#visibleCO2Emission").ionRangeSlider({
+      $("#visibleCO2eEmission").ionRangeSlider({
           min: 0.0,
           max: 1,
           from: 0.47,  // https://ourworldindata.org/grapher/carbon-intensity-electricity?tab=chart
@@ -453,11 +453,11 @@
           prettify: false,
           hasGrid: true,
           onFinish: function (data) {
-              updateDashboardData("visibleCO2Emission", data);
+              updateDashboardData("visibleCO2eEmission", data);
           }
         });
       // Set the initial value of the hidden input to match the slider's default
-      $('#hiddenCO2Emission').val(0.47);
+      $('#hiddenCO2eEmission').val(0.47);
      
       // Function to get CSRF token from a cookie
       function getCsrfToken() {
@@ -492,7 +492,7 @@
         var hiddenH2Production = $('#hiddenH2Production').val();
         var hiddenElectrolyzerEff = $('#hiddenElectrolyzerEff').val();
         var hiddenRenewablePct = $('#hiddenRenewablePct').val();
-        var hiddenCO2Emission = $('#hiddenCO2Emission').val();
+        var hiddenCO2eEmission = $('#hiddenCO2eEmission').val();
 
         // static data for chart testing
         // var electricityChartData = [{
@@ -538,7 +538,7 @@
             'hiddenH2Production': hiddenH2Production,
             'hiddenElectrolyzerEff': hiddenElectrolyzerEff,
             'hiddenRenewablePct': hiddenRenewablePct,
-            'hiddenCO2Emission': hiddenCO2Emission
+            'hiddenCO2eEmission': hiddenCO2eEmission
           },
           success: function (response) {
 
@@ -551,7 +551,7 @@
             $('#displayTotalElectricityRequirement').text(response.total_electricity_requirement + ' TWh');
             $('#displayTotalH2Production').text(response.total_h2_production + ' MegaTonnes');
             $('#displayRequiredElectrolyzerUnits').text(response.required_electrolyzer_units + ' Units');
-            $('#displayTotalCO2eEmissions').text(response.total_co2_emissions + ' MegaTonnes');
+            $('#displayTotalCO2eEmissions').text(response.total_co2e_emissions + ' MegaTonnes');
             // Parse the chart data and layout
             var electricity_chart_data = JSON.parse(response.electricity_chart_data);
             var electricity_chart_layout = JSON.parse(response.electricity_chart_layout);
