@@ -13,6 +13,9 @@ import json
 def home(request):
     return render(request, 'home.html')
 
+def hydrogen_blog(request):
+    return render(request, 'h2_prod/hydrogen.html')
+
 def hydrogen_production_view(request):
     #  debugging
     print("View function called")
